@@ -1,0 +1,415 @@
+[
+  {
+    "id": "001",
+    "name": "Rubikarte",
+    "rarity": 0,
+    "faceA": "cartes/001.png",
+    "collectedDate": null
+  },
+  {
+    "id": "002",
+    "name": "Rubikcat",
+    "rarity": 0,
+    "faceA": "cartes/002.png",
+    "collectedDate": null
+  },
+  {
+    "id": "003",
+    "name": "Emilie GR",
+    "rarity": 0,
+    "faceA": "cartes/003.png",
+    "collectedDate": null
+  },
+  {
+    "id": "004",
+    "name": "Gardien",
+    "rarity": 0,
+    "faceA": "cartes/004.png",
+    "collectedDate": null
+  },
+  {
+    "id": "005",
+    "name": "Bâtiment Helios",
+    "rarity": 0,
+    "faceA": "cartes/005.png",
+    "collectedDate": null
+  },
+  {
+    "id": "006",
+    "name": "Clare",
+    "rarity": 0,
+    "faceA": "cartes/006.png",
+    "collectedDate": null
+  },
+  {
+    "id": "007",
+    "name": "Denis",
+    "rarity": 1,
+    "faceA": "cartes/007.png",
+    "collectedDate": null
+  },
+  {
+    "id": "008",
+    "name": "Emilie Gumez",
+    "rarity": 0,
+    "faceA": "cartes/008.png",
+    "collectedDate": null
+  },
+  {
+    "id": "009",
+    "name": "Caroline",
+    "rarity": 1,
+    "faceA": "cartes/009.png",
+    "collectedDate": null
+  },
+  {
+    "id": "010",
+    "name": "FeedPaq",
+    "rarity": 0,
+    "faceA": "cartes/010.png",
+    "collectedDate": null
+  },
+  {
+    "id": "011",
+    "name": "Eddy",
+    "rarity": 0,
+    "faceA": "cartes/011.png",
+    "collectedDate": null
+  },
+  {
+    "id": "012",
+    "name": "Vincent & Alicia",
+    "rarity": 0,
+    "faceA": "cartes/012.png",
+    "collectedDate": null
+  },
+  {
+    "id": "013",
+    "name": "L'arène de combat",
+    "rarity": 0,
+    "faceA": "cartes/013.png",
+    "collectedDate": null
+  },
+  {
+    "id": "014",
+    "name": "Plus de souris",
+    "rarity": 0,
+    "faceA": "cartes/014.png",
+    "collectedDate": null
+  },
+  {
+    "id": "015",
+    "name": "Omoï",
+    "rarity": 0,
+    "faceA": "cartes/015.png",
+    "collectedDate": null
+  },
+  {
+    "id": "016",
+    "name": "Nicolas",
+    "rarity": 0,
+    "faceA": "cartes/016.png",
+    "collectedDate": null
+  },
+  {
+    "id": "017",
+    "name": "Puff GigaPro1000Max",
+    "rarity": 0,
+    "faceA": "cartes/017.png",
+    "collectedDate": null
+  },
+  {
+    "id": "018",
+    "name": "Magomed",
+    "rarity": 0,
+    "faceA": "cartes/018.png",
+    "collectedDate": null
+  },
+  {
+    "id": "019",
+    "name": "Vincent",
+    "rarity": 1,
+    "faceA": "cartes/019.png",
+    "collectedDate": null
+  },
+  {
+    "id": "020",
+    "name": "Orlane",
+    "rarity": 1,
+    "faceA": "cartes/020.png",
+    "collectedDate": null
+  },
+  {
+    "id": "021",
+    "name": "Quentin",
+    "rarity": 1,
+    "faceA": "cartes/021.png",
+    "collectedDate": null
+  },
+  {
+    "id": "022",
+    "name": "Renault",
+    "rarity": 1,
+    "faceA": "cartes/022.png",
+    "collectedDate": null
+  },
+  {
+    "id": "023",
+    "name": "Moto de Renault",
+    "rarity": 0,
+    "faceA": "cartes/023.png",
+    "collectedDate": null
+  },
+  {
+    "id": "024",
+    "name": "Survet",
+    "rarity": 0,
+    "faceA": "cartes/024.png",
+    "collectedDate": null
+  },
+  {
+    "id": "025",
+    "name": "Julien",
+    "rarity": 1,
+    "faceA": "cartes/025.png",
+    "collectedDate": null
+  },
+  {
+    "id": "026",
+    "name": "Pierre",
+    "rarity": 1,
+    "faceA": "cartes/026.png",
+    "collectedDate": null
+  },
+  {
+    "id": "027",
+    "name": "Stephane",
+    "rarity": 1,
+    "faceA": "cartes/027.png",
+    "collectedDate": null
+  },
+  {
+    "id": "028",
+    "name": "Nicolas",
+    "rarity": 1,
+    "faceA": "cartes/028.png",
+    "collectedDate": null
+  },
+  {
+    "id": "029",
+    "name": "Sketchbook",
+    "rarity": 0,
+    "faceA": "cartes/029.png",
+    "collectedDate": null
+  },
+  {
+    "id": "030",
+    "name": "Antoine",
+    "rarity": 0,
+    "faceA": "cartes/030.png",
+    "collectedDate": null
+  },
+  {
+    "id": "031",
+    "name": "Axel",
+    "rarity": 0,
+    "faceA": "cartes/031.png",
+    "collectedDate": null
+  },
+  {
+    "id": "032",
+    "name": "Clara",
+    "rarity": 0,
+    "faceA": "cartes/032.png",
+    "collectedDate": null
+  },
+  {
+    "id": "033",
+    "name": "Clémence",
+    "rarity": 0,
+    "faceA": "cartes/033.png",
+    "collectedDate": null
+  },
+  {
+    "id": "034",
+    "name": "Clérie",
+    "rarity": 0,
+    "faceA": "cartes/034.png",
+    "collectedDate": null
+  },
+  {
+    "id": "035",
+    "name": "Constantin",
+    "rarity": 0,
+    "faceA": "cartes/035.png",
+    "collectedDate": null
+  },
+  {
+    "id": "036",
+    "name": "Eliott",
+    "rarity": 0,
+    "faceA": "cartes/036.png",
+    "collectedDate": null
+  },
+  {
+    "id": "037",
+    "name": "Elise",
+    "rarity": 0,
+    "faceA": "cartes/037.png",
+    "collectedDate": null
+  },
+  {
+    "id": "038",
+    "name": "Lunettes d'Elise",
+    "rarity": 0,
+    "faceA": "cartes/038.png",
+    "collectedDate": null
+  },
+  {
+    "id": "039",
+    "name": "Barre Chocolatée",
+    "rarity": 0,
+    "faceA": "cartes/039.png",
+    "collectedDate": null
+  },
+  {
+    "id": "040",
+    "name": "Gaspard",
+    "rarity": 0,
+    "faceA": "cartes/040.png",
+    "collectedDate": null
+  },
+  {
+    "id": "041",
+    "name": "Maychup",
+    "rarity": 0,
+    "faceA": "cartes/041.png",
+    "collectedDate": null
+  },
+  {
+    "id": "042",
+    "name": "Gauthier",
+    "rarity": 0,
+    "faceA": "cartes/042.png",
+    "collectedDate": null
+  },
+  {
+    "id": "043",
+    "name": "Trampoline",
+    "rarity": 0,
+    "faceA": "cartes/043.png",
+    "collectedDate": null
+  },
+  {
+    "id": "044",
+    "name": "Hector",
+    "rarity": 0,
+    "faceA": "cartes/044.png",
+    "collectedDate": null
+  },
+  {
+    "id": "045",
+    "name": "Meusprey",
+    "rarity": 0,
+    "faceA": "cartes/045.png",
+    "collectedDate": null
+  },
+  {
+    "id": "046",
+    "name": "Hélène",
+    "rarity": 0,
+    "faceA": "cartes/046.png",
+    "collectedDate": null
+  },
+  {
+    "id": "047",
+    "name": "Luna",
+    "rarity": 0,
+    "faceA": "cartes/047.png",
+    "collectedDate": null
+  },
+  {
+    "id": "048",
+    "name": "Maëlle",
+    "rarity": 0,
+    "faceA": "cartes/048.png",
+    "collectedDate": null
+  },
+  {
+    "id": "049",
+    "name": "Marie",
+    "rarity": 0,
+    "faceA": "cartes/049.png",
+    "collectedDate": null
+  },
+  {
+    "id": "050",
+    "name": "Mathilde",
+    "rarity": 0,
+    "faceA": "cartes/050.png",
+    "collectedDate": null
+  },
+  {
+    "id": "051",
+    "name": "Maximilien",
+    "rarity": 0,
+    "faceA": "cartes/051.png",
+    "collectedDate": null
+  },
+  {
+    "id": "052",
+    "name": "Romain",
+    "rarity": 0,
+    "faceA": "cartes/052.png",
+    "collectedDate": null
+  },
+  {
+    "id": "053",
+    "name": "Thibault",
+    "rarity": 0,
+    "faceA": "cartes/053.png",
+    "collectedDate": null
+  },
+  {
+    "id": "054",
+    "name": "Tin",
+    "rarity": 0,
+    "faceA": "cartes/054.png",
+    "collectedDate": null
+  },
+  {
+    "id": "055",
+    "name": "Valentin",
+    "rarity": 0,
+    "faceA": "cartes/055.png",
+    "collectedDate": null
+  },
+  {
+    "id": "056",
+    "name": "Muji",
+    "rarity": 0,
+    "faceA": "cartes/056.png",
+    "collectedDate": null
+  },
+  {
+    "id": "057",
+    "name": "D & Yerima",
+    "rarity": 1,
+    "faceA": "cartes/057.png",
+    "collectedDate": null
+  },
+  {
+    "id": "058",
+    "name": "Rendu Blender Défaillant",
+    "rarity": 0,
+    "faceA": "cartes/058.png",
+    "collectedDate": null
+  },
+  {
+    "id": "059",
+    "name": "Energie Tana",
+    "rarity": 1,
+    "faceA": "cartes/059.png",
+    "collectedDate": null
+  }
+]
