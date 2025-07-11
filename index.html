@@ -11,299 +11,51 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Rubikémon - Accueil</title>
 </head>
-<body>
+<body style="overflow: hidden">
 
 <img src="logo.png" alt="logo">
 
-<!-- COOLDOWN EN DEHORS DU CONTAINER -->
-<div id="cooldown" style="display:none; text-align: center;">
-  <img id="cooldownCard" src="faceB.png" style="opacity:0.3; width:150px; height:auto;">
-  <div id="chrono" style="text-align: center;">
-    <p id="cooldownText">Prochain lot dans : 30 min 0 sec</p>
-  </div>
-</div>
+<img src="image.png" alt="image">
 
-<div id="cartes-container" style="position: relative;">
-  <!-- les cartes seront injectées ici -->
-</div>
+<p class="description">De nouveaux Rubikémons ont débarqué.<br>Attrappez-les tous !</p>
 
+<a href="accueil.html" class="jouer">Jouer maintenant</a>
 
 <script>
-const container = document.getElementById("cartes-container");
-const cooldownDiv = document.getElementById("cooldown");
-const cooldownText = document.getElementById("cooldownText");
-const cooldownCard = document.getElementById("cooldownCard");
+  const bouton = document.querySelector(".jouer");
+  const paragraphe = document.querySelector(".description");
 
-let cartesData = []; 
-let defausseCount = Number(localStorage.getItem("defausseCount")) || 0;
-let cooldownEndTimestamp = Number(localStorage.getItem("cooldownEndTimestamp")) || 0;
-let cooldownInterval;
+  // 📅 Date de lancement (attention au fuseau horaire si besoin)
+  const dateLancement = new Date("2025-07-11T19:00:00"); // AAAA-MM-JJTHH:mm:ss
 
-// Pondération des cartes selon rareté : 0 = commun, 1 = peu rare, 2 = rare, 3 = très rare
-const poidsParRarete = [40, 25, 20, 10];
+  function update() {
+    const maintenant = new Date();
+    const diff = dateLancement - maintenant;
 
-function clearContainer() {
-  container.innerHTML = "";
-}
-
-function creerCarte(carteData, zIndex, defaussee) {
-  const carte = document.createElement("div");
-  carte.classList.add("carte");
-  carte.style.zIndex = zIndex;
-
-  const faceB = document.createElement("img");
-  faceB.src = "faceB.png";
-  faceB.classList.add("faceB");
-
-  const faceA = document.createElement("img");
-  faceA.src = carteData.faceA;
-  faceA.classList.add("faceA");
-
-  carte.appendChild(faceB);
-  carte.appendChild(faceA);
-
-  let flipped = false;
-  let defausseeLocal = defaussee;
-
-  if (defausseeLocal) {
-    carte.style.display = "none"; 
-  }
-
-  carte.addEventListener("click", () => {
-  if (defausseeLocal) return;
-
-  if (!flipped) {
-    carte.classList.add("faceA-visible");
-    flipped = true;
-    console.log(`Carte ${carteData.id} retournée`);
-  } else {
-    carte.classList.add("defausse");
-    defausseeLocal = true;
-
-    // Incrémenter rareté une fois que la carte apparaît (sauf rareté 3)
-    if ((carteData.rarity ?? 0) !== 3) {
-      // Récupère la rareté actuelle depuis localStorage (initialiser si besoin)
-      let rareteCount = JSON.parse(localStorage.getItem("rareteCount")) || {};
-
-      // Incrémenter la rareté de cette carte
-      rareteCount[carteData.id] = (rareteCount[carteData.id] || 0) + 1;
-
-      localStorage.setItem("rareteCount", JSON.stringify(rareteCount));
-      console.log(`Rareté de la carte ${carteData.id} incrémentée à ${rareteCount[carteData.id]}`);
-
-      // Incrémenter defausseCount puisque ce n’est pas rareté 3
-      defausseCount++;
-      localStorage.setItem("defausseCount", defausseCount);
-      console.log(`Carte ${carteData.id} défaussée, defausseCount: ${defausseCount}`);
+    if (diff <= 0) {
+      // 🎉 Date atteinte
+      bouton.style.pointerEvents = "auto";
+      bouton.style.opacity = 1;
+      bouton.textContent = "Jouer maintenant";
+      paragraphe.innerHTML = "De nouveaux Rubikémons ont débarqué.<br>Attrapez-les tous !";
     } else {
-      console.log(`Carte ${carteData.id} défaussée mais rareté 3, pas d'incrément de rareté ni defausseCount`);
+      // ⏳ Encore en attente
+      bouton.style.pointerEvents = "none";
+      bouton.style.opacity = 0.5;
+
+      const secondes = Math.floor(diff / 1000) % 60;
+      const minutes = Math.floor(diff / 1000 / 60) % 60;
+      const heures = Math.floor(diff / 1000 / 60 / 60) % 24;
+      const jours = Math.floor(diff / 1000 / 60 / 60 / 24);
+
+      bouton.textContent = `Disponible dans ${jours}j ${heures}h ${minutes}m ${secondes}s`;
+      paragraphe.innerHTML = "Les Rubikémons arrivent bientôt...<br>Prépare-toi à les attraper !";
     }
-
-    carte.addEventListener(
-      "animationend",
-      () => {
-        container.removeChild(carte);
-        console.log(`Carte ${carteData.id} retirée du DOM`);
-
-        if (defausseCount >= cartesData.length) {
-          console.log("Toutes les cartes défaussées, lancement cooldown");
-          lancerCooldown();
-        }
-      },
-      { once: true }
-    );
-  }
-});
-
-
-
-  return carte;
-}
-
-// Fonction qui crée une pool pondérée selon la rareté et tire une carte au hasard
-function tirerUneCarteSelonRarete(cartes) {
-  const pool = [];
-  cartes.forEach(c => {
-    const rarete = c.rarity ?? 0;
-    const poids = poidsParRarete[rarete] || 1;
-    for (let i = 0; i < poids; i++) {
-      pool.push(c);
-    }
-  });
-
-  const choix = pool[Math.floor(Math.random() * pool.length)];
-  console.log(`Carte tirée selon rareté: ${choix.id} (rarete ${choix.rarity})`);
-  return choix;
-}
-
-function tirerCartes() {
-  clearContainer();
-
-  cooldownDiv.style.display = "none";
-
-  if (isCooldownActive()) {
-    console.log("Cooldown actif, affichage cooldown");
-    lancerCooldown();
-    return;
   }
 
-  defausseCount = Number(localStorage.getItem("defausseCount")) || 0;
-
-  cartesData.forEach((carteData, i) => {
-    const isDefaussee = i < defausseCount;
-    const carte = creerCarte(carteData, cartesData.length - i, isDefaussee);
-    container.appendChild(carte);
-    console.log(`Carte ${carteData.id} affichée, defaussee: ${isDefaussee}`);
-  });
-}
-
-function isCooldownActive() {
-  const now = Date.now();
-  return cooldownEndTimestamp > now;
-}
-
-function lancerCooldown() {
-  const now = Date.now();
-  if (!cooldownEndTimestamp || cooldownEndTimestamp < now) {
-    cooldownEndTimestamp = now + 15 * 60 * 1000; // 15 minutes
-    localStorage.setItem("cooldownEndTimestamp", cooldownEndTimestamp);
-    console.log(`Cooldown lancé, fin à ${new Date(cooldownEndTimestamp).toLocaleTimeString()}`);
-  }
-
-  cooldownDiv.style.display = "block";
-  cooldownCard.src = "faceB.png";
-
-  updateCooldownText();
-
-  clearInterval(cooldownInterval);
-  cooldownInterval = setInterval(() => {
-    const now = Date.now();
-    const remainingMs = cooldownEndTimestamp - now;
-
-    if (remainingMs <= 0) {
-      clearInterval(cooldownInterval);
-      cooldownDiv.style.display = "none";
-      localStorage.removeItem("defausseCount");
-      localStorage.removeItem("cooldownEndTimestamp");
-      defausseCount = 0;
-      localStorage.setItem("defausseCount", defausseCount);
-
-      console.log("Cooldown terminé, tirage d'un nouveau lot");
-      // À la fin du cooldown, on tire un nouveau lot
-      nouveauTirage();
-    } else {
-      updateCooldownText(remainingMs);
-    }
-  }, 1000);
-}
-
-function updateCooldownText(remainingMs) {
-  let ms = remainingMs ?? cooldownEndTimestamp - Date.now();
-  const totalSeconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  cooldownText.textContent = `Prochain lot dans : ${minutes} min ${seconds.toString().padStart(2, "0")} sec`;
-}
-
-function nouveauTirage() {
-  fetch("cartes.json")
-    .then((res) => res.json())
-    .then((data) => {
-      const tirage = [];
-      while (tirage.length < 5) {
-        const c = tirerUneCarteSelonRarete(data);
-        if (!tirage.some(t => t.id === c.id)) {
-          const dateNow = Date.now();
-          c.collectedDate = dateNow;
-          tirage.push(c);
-          console.log(`Carte ${c.id} ajoutée au tirage avec collectedDate: ${new Date(dateNow).toLocaleString()}`);
-        } else {
-          console.log(`Doublon évité pour la carte ${c.id}`);
-        }
-      }
-
-      // Enregistre les cartes dans cartesData avec la date de collecte incluse
-      cartesData = tirage.map(c => ({
-        faceA: c.faceA,
-        id: c.id,
-        rarity: c.rarity,
-        collectedDate: c.collectedDate
-      }));
-
-      console.log("Nouveau tirage complet avec dates :", cartesData.map(c => ({
-        id: c.id,
-        date: new Date(c.collectedDate).toLocaleString()
-      })));
-
-      // Récupère les cartes déjà stockées
-      let cartesExistantes = JSON.parse(localStorage.getItem("cartesCollectees")) || [];
-
-      // Filtre les nouvelles cartes pour éviter les doublons (même id)
-      const nouvellesCartes = cartesData.filter(
-        nouvelle => !cartesExistantes.some(existante => existante.id === nouvelle.id)
-      );
-
-      // Fusionne et sauvegarde
-      const updatedCartes = [...cartesExistantes, ...nouvellesCartes];
-      localStorage.setItem("cartesCollectees", JSON.stringify(updatedCartes));
-
-      console.log("Cartes collectées sauvegardées dans localStorage", cartesData);
-
-
-      defausseCount = 0;
-      localStorage.setItem("defausseCount", defausseCount);
-
-      tirerCartes();
-    })
-    .catch(() => {
-      console.log("Erreur lors du fetch, tirage par défaut utilisé");
-
-      const now = Date.now();
-      cartesData = [
-        { faceA: "faceA.png", id: "default1", rarity: 0, collectedDate: now },
-        { faceA: "faceA.png", id: "default2", rarity: 0, collectedDate: now },
-        { faceA: "faceA.png", id: "default3", rarity: 0, collectedDate: now },
-        { faceA: "faceA.png", id: "default4", rarity: 0, collectedDate: now },
-        { faceA: "faceA.png", id: "default5", rarity: 0, collectedDate: now }
-      ];
-
-      console.log("Tirage par défaut avec dates :", cartesData.map(c => ({
-        id: c.id,
-        date: new Date(c.collectedDate).toLocaleString()
-      })));
-
-      defausseCount = 0;
-      localStorage.setItem("defausseCount", defausseCount);
-      tirerCartes();
-    });
-}
-
-
-function init() {
-  console.log("Init, cooldown actif ?", isCooldownActive());
-  if (isCooldownActive()) {
-    lancerCooldown();
-  } else {
-    nouveauTirage();
-  }
-}
-
-init();
-
-
+  update(); // appel immédiat
+  setInterval(update, 1000); // mise à jour toutes les secondes
 </script>
-
-
-
-<nav class="tab-bar">
-  <a href="index.html">
-    <button class="tab-button active"><span class="material-icons">home</span> Accueil</button></a>
-  <a href="rubikedex.html">
-    <button class="tab-button"><span class="material-icons">grid_view</span> Rubikédex</button></a>
-  <a href="credits.html">
-    <button class="tab-button"><span class="material-icons">info</span> Crédits</button></a>
-</nav>
 
 
 </body>
