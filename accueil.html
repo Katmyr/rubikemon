@@ -29,6 +29,12 @@
 
 
 <script>
+// Raccourci debug log
+const log = (...args) => console.log("🧩", ...args);
+const warn = (...args) => console.warn("⚠️", ...args);
+const err = (...args) => console.error("❌", ...args);
+
+// Variables
 const container = document.getElementById("cartes-container");
 const cooldownDiv = document.getElementById("cooldown");
 const cooldownText = document.getElementById("cooldownText");
@@ -43,6 +49,7 @@ let cartesDefaussees = JSON.parse(localStorage.getItem("cartesDefaussees")) || {
 
 function clearContainer() {
   container.innerHTML = "";
+  log("Container vidé");
 }
 
 function creerCarte(carteData, zIndex) {
@@ -65,6 +72,7 @@ function creerCarte(carteData, zIndex) {
   const isDefaussee = !!cartesDefaussees[carteData.id];
   if (isDefaussee) {
     carte.style.display = "none";
+    log(`Carte ${carteData.id} déjà défaussée`);
   }
 
   carte.addEventListener("click", () => {
@@ -74,7 +82,7 @@ function creerCarte(carteData, zIndex) {
     const dejaRetournee = cartesRetournees.includes(carteData.id);
 
     if (!flipped && cartesRetournees.length >= 5) {
-      console.log("Limite de 5 retournements atteinte");
+      warn("Limite de 5 retournements atteinte");
       return;
     }
 
@@ -85,7 +93,7 @@ function creerCarte(carteData, zIndex) {
       if (!dejaRetournee) {
         cartesRetournees.push(carteData.id);
         localStorage.setItem("cartesRetournees", JSON.stringify(cartesRetournees));
-        console.log(`Carte ${carteData.id} retournée (${cartesRetournees.length}/5)`);
+        log(`Carte ${carteData.id} retournée (${cartesRetournees.length}/5)`);
 
         let cartesCollectees = JSON.parse(localStorage.getItem("cartesCollectees")) || [];
         if (!cartesCollectees.some(c => c.id === carteData.id)) {
@@ -95,29 +103,26 @@ function creerCarte(carteData, zIndex) {
           };
           cartesCollectees.push(nouvelleCarte);
           localStorage.setItem("cartesCollectees", JSON.stringify(cartesCollectees));
-          console.log(`Carte ${carteData.id} ajoutée à cartesCollectees`);
+          log(`Carte ${carteData.id} ajoutée à cartesCollectees`);
         }
       }
     } else {
       carte.classList.add("defausse");
       cartesDefaussees[carteData.id] = true;
       localStorage.setItem("cartesDefaussees", JSON.stringify(cartesDefaussees));
-      console.log(`Carte ${carteData.id} défaussée`);
+      log(`Carte ${carteData.id} défaussée`);
 
-      carte.addEventListener(
-        "animationend",
-        () => {
-          container.removeChild(carte);
-          console.log(`Carte ${carteData.id} retirée du DOM`);
+      carte.addEventListener("animationend", () => {
+        container.removeChild(carte);
+        log(`Carte ${carteData.id} retirée du DOM`);
 
-          const totalDefaussees = Object.keys(cartesDefaussees).length;
-          if (totalDefaussees >= cartesData.length) {
-            console.log("Toutes les cartes défaussées, lancement cooldown");
-            lancerCooldown();
-          }
-        },
-        { once: true }
-      );
+        const totalDefaussees = Object.keys(cartesDefaussees).length;
+        log(`Total cartes défaussées: ${totalDefaussees}/${cartesData.length}`);
+        if (totalDefaussees >= cartesData.length) {
+          warn("Toutes les cartes défaussées → lancement cooldown");
+          lancerCooldown();
+        }
+      }, { once: true });
     }
   });
 
@@ -134,8 +139,13 @@ function tirerUneCarteSelonRarete(cartes) {
     }
   });
 
+  if (pool.length === 0) {
+    err("Pool vide ! Impossible de tirer une carte");
+    return null;
+  }
+
   const choix = pool[Math.floor(Math.random() * pool.length)];
-  console.log(`Carte tirée selon rareté: ${choix.id} (rarete ${choix.rarity})`);
+  log(`Carte tirée : ${choix.id} (rarete ${choix.rarity})`);
   return choix;
 }
 
@@ -144,15 +154,15 @@ function tirerCartes() {
   cooldownDiv.style.display = "none";
 
   if (isCooldownActive()) {
-    console.log("Cooldown actif, affichage cooldown");
+    warn("Cooldown encore actif");
     lancerCooldown();
     return;
   }
 
+  log("Tirage en cours avec", cartesData.length, "cartes");
   cartesData.forEach((carteData, i) => {
     const carte = creerCarte(carteData, cartesData.length - i);
     container.appendChild(carte);
-    console.log(`Carte ${carteData.id} affichée`);
   });
 }
 
@@ -164,9 +174,9 @@ function isCooldownActive() {
 function lancerCooldown() {
   const now = Date.now();
   if (!cooldownEndTimestamp || cooldownEndTimestamp < now) {
-    cooldownEndTimestamp = now + 15 * 60 * 1000;
+    cooldownEndTimestamp = now + 5 * 60 * 1000;
     localStorage.setItem("cooldownEndTimestamp", cooldownEndTimestamp);
-    console.log(`Cooldown lancé, fin à ${new Date(cooldownEndTimestamp).toLocaleTimeString()}`);
+    log(`Cooldown lancé jusqu'à ${new Date(cooldownEndTimestamp).toLocaleTimeString()}`);
   }
 
   cooldownDiv.style.display = "block";
@@ -186,8 +196,8 @@ function lancerCooldown() {
       localStorage.removeItem("cartesDefaussees");
       localStorage.removeItem("cartesRetournees");
       cartesDefaussees = {};
-      clearContainer(); // Ajout ici pour vider le DOM
-      console.log("Cooldown terminé, tirage d'un nouveau lot");
+      clearContainer();
+      warn("Cooldown terminé → nouveau tirage");
       nouveauTirage();
     } else {
       updateCooldownText(remainingMs);
@@ -200,21 +210,30 @@ function updateCooldownText(remainingMs) {
   const totalSeconds = Math.floor(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-
   cooldownText.textContent = `Prochain lot dans : ${minutes} min ${seconds.toString().padStart(2, "0")} sec`;
 }
 
 function nouveauTirage() {
+  log("→ Lancement d’un nouveau tirage");
   fetch("cartes.json")
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) throw new Error("Réponse réseau invalide");
+      return res.json();
+    })
     .then((data) => {
       const tirage = [];
       while (tirage.length < 5) {
         const c = tirerUneCarteSelonRarete(data);
-        if (!tirage.some(t => t.id === c.id)) {
+        if (c && !tirage.some(t => t.id === c.id)) {
           tirage.push({ ...c });
         }
       }
+
+      if (tirage.length < 5) {
+        err("Tirage incomplet !", tirage);
+        return;
+      }
+
       cartesData = tirage.map(c => ({
         faceA: c.faceA,
         id: c.id,
@@ -224,21 +243,35 @@ function nouveauTirage() {
       localStorage.removeItem("cartesRetournees");
       tirerCartes();
     })
-    .catch(() => {
-      console.error("Erreur lors du chargement des cartes");
+    .catch((e) => {
+      err("Erreur lors du chargement des cartes :", e.message);
     });
 }
 
 function init() {
+  log("🔁 Initialisation");
   const tirageStocke = localStorage.getItem("tirageEnCours");
   if (tirageStocke) {
     cartesData = JSON.parse(tirageStocke);
-    console.log("Chargement tirage stocké", cartesData.map(c => c.id));
+    log("Tirage récupéré depuis le localStorage :", cartesData.map(c => c.id));
     if (isCooldownActive()) {
-      lancerCooldown();
-    } else {
-      tirerCartes();
-    }
+  console.log("🧩 Cooldown toujours actif → relancer cooldown");
+  lancerCooldown();
+} else {
+  const totalDefaussees = Object.keys(cartesDefaussees).length;
+  if (totalDefaussees >= cartesData.length) {
+    console.log("🧩 Cooldown terminé et toutes les cartes étaient défaussées → nouveau tirage");
+    localStorage.removeItem("cooldownEndTimestamp");
+    localStorage.removeItem("cartesDefaussees");
+    localStorage.removeItem("cartesRetournees");
+    cartesDefaussees = {};
+    nouveauTirage();
+  } else {
+    console.log("🧩 Cooldown terminé mais cartes pas toutes défaussées → reaffichage normal");
+    tirerCartes();
+  }
+}
+
   } else {
     nouveauTirage();
   }
@@ -246,6 +279,7 @@ function init() {
 
 init();
 </script>
+
 
 
 
