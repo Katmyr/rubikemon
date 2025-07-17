@@ -81,10 +81,12 @@ function creerCarte(carteData, zIndex) {
     let cartesRetournees = JSON.parse(localStorage.getItem("cartesRetournees")) || [];
     const dejaRetournee = cartesRetournees.includes(carteData.id);
 
-    if (!flipped && cartesRetournees.length >= 5) {
+    const cartesEncoreActives = cartesRetournees.filter(id => !cartesDefaussees[id]);
+    if (!flipped && cartesEncoreActives.length >= 5) {
       warn("Limite de 5 retournements atteinte");
       return;
     }
+
 
     if (!flipped) {
       carte.classList.add("faceA-visible");
